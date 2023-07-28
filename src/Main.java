@@ -8,9 +8,9 @@ import java.util.ArrayList;
 public class Main {
 
     public static void main(String[] args) {
-        ArrayList<Task> tasks = new ArrayList<>();
-        ArrayList<Epic> epics = new ArrayList<>();
-        ArrayList<Subtask> subtasks = new ArrayList<>();
+        ArrayList<Task> tasks;
+        ArrayList<Epic> epics;
+        ArrayList<Subtask> subtasks;
         Task task1 = new Task("task1", "descTask1");
         Task task2 = new Task("task2", "descTask2");
         Epic epic1 = new Epic("epic1", "descEpic1");
@@ -128,7 +128,7 @@ public class Main {
         taskManager.deleteAllTasks();
         System.out.println("Вывод всех задач:");
         tasks = taskManager.getTasksList();
-        if (tasks == null) {
+        if (tasks.isEmpty()) {
             System.out.println("Список задач пуст!");
         } else {
             for (Task task : tasks) {
@@ -297,7 +297,7 @@ public class Main {
         taskManager.deleteAllSubtasks();
         epics = taskManager.getEpicsList();
         System.out.println("Вывод всех эпиков:");
-        if (epics == null) {
+        if (epics.isEmpty()) {
             System.out.println("Список подзадач пуст!");
         } else {
             for (Epic epic : epics) {
@@ -308,7 +308,7 @@ public class Main {
 
         subtasks = taskManager.getSubtasksList();
         System.out.println("Вывод всех подзадач:");
-        if (subtasks == null) {
+        if (subtasks.isEmpty()) {
             System.out.println("Список подзадач пуст!");
         } else {
             for (Subtask subtask : subtasks) {
@@ -353,7 +353,6 @@ public class Main {
 
         System.out.println("Вывод всех подзадач 1 эпика:");
         subtasks = taskManager.getSubtasksByEpic(idEpic1);
-        System.out.println("Вывод всех подзадач:");
         for (Subtask subtask : subtasks) {
             System.out.println(subtask);
         }
@@ -361,7 +360,6 @@ public class Main {
 
         System.out.println("Вывод всех подзадач 2 эпика:");
         subtasks = taskManager.getSubtasksByEpic(idEpic2);
-        System.out.println("Вывод всех подзадач:");
         for (Subtask subtask : subtasks) {
             System.out.println(subtask);
         }
@@ -389,7 +387,7 @@ public class Main {
         System.out.println();
 
         System.out.println("Вывод всех эпиков:");
-        if (epics == null) {
+        if (epics.isEmpty()) {
             System.out.println("Список эпиков пуст!");
         } else {
             for (Epic epic : epics) {
@@ -400,7 +398,7 @@ public class Main {
 
         subtasks = taskManager.getSubtasksList();
         System.out.println("Вывод всех подзадач:");
-        if (epics == null) {
+        if (epics.isEmpty()) {
             System.out.println("Список подзадач пуст!");
         } else {
             for (Subtask subtask : subtasks) {

@@ -10,9 +10,9 @@ import java.util.HashMap;
 // Это менеджер, который управляет всеми задачами
 public class TaskManager {
     private long idGenerator = 0;
-    private HashMap<Long, Task> tasks;
-    private HashMap<Long, Epic> epics;
-    private HashMap<Long, Subtask> subtasks;
+    private final HashMap<Long, Task> tasks;
+    private final HashMap<Long, Epic> epics;
+    private final HashMap<Long, Subtask> subtasks;
 
     public TaskManager() {
         this.tasks = new HashMap<>();
@@ -22,14 +22,7 @@ public class TaskManager {
 
     // Получение списка всех задач
     public ArrayList<Task> getTasksList() {
-        if (tasks.isEmpty()) {
-            return null;
-        }
-        ArrayList<Task> tasksArrayList = new ArrayList<>();
-        for (Task task : tasks.values()) {
-            tasksArrayList.add(task);
-        }
-        return tasksArrayList;
+        return new ArrayList<>(tasks.values());
     }
 
     // Удаление всех задач
@@ -79,14 +72,7 @@ public class TaskManager {
 
     // Получение списка всех эпиков
     public ArrayList<Epic> getEpicsList() {
-        if (epics.isEmpty()) {
-            return null;
-        }
-        ArrayList<Epic> epicsArrayList = new ArrayList<>();
-        for (Epic epic : epics.values()) {
-            epicsArrayList.add(epic);
-        }
-        return epicsArrayList;
+        return new ArrayList<>(epics.values());
     }
 
     // Удаление всех эпиков
@@ -145,14 +131,7 @@ public class TaskManager {
 
     // Получение списка всех подзадач
     public ArrayList<Subtask> getSubtasksList() {
-        if (subtasks.isEmpty()) {
-            return null;
-        }
-        ArrayList<Subtask> subtasksArrayList = new ArrayList<>();
-        for (Subtask subtask : subtasks.values()) {
-            subtasksArrayList.add(subtask);
-        }
-        return subtasksArrayList;
+        return new ArrayList<>(subtasks.values());
     }
 
     // Удаление всех подзадач
@@ -226,11 +205,11 @@ public class TaskManager {
         Epic epic = epics.get(epicId);
         if (epic == null) {
             System.out.println("Эпик с идентификатором " + epicId + " не существует!");
-            return null;
+            return new ArrayList<>();
         }
         ArrayList<Long> subtaskIds = epic.getSubtaskIds();
         if (subtaskIds.isEmpty()) {
-            return null;
+            return new ArrayList<>();
         }
         ArrayList<Subtask> subtasksArrayList = new ArrayList<>();
         for (Long subtaskId : subtaskIds) {
