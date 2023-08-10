@@ -1,21 +1,21 @@
 import model.Epic;
 import model.Subtask;
 import model.Task;
-import service.TaskManager;
+import service.InMemoryTaskManager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-        ArrayList<Task> tasks;
-        ArrayList<Epic> epics;
-        ArrayList<Subtask> subtasks;
+        List<Task> tasks;
+        List<Epic> epics;
+        List<Subtask> subtasks;
         Task task1 = new Task("task1", "descTask1");
         Task task2 = new Task("task2", "descTask2");
         Epic epic1 = new Epic("epic1", "descEpic1");
         Epic epic2 = new Epic("epic2", "descEpic2");
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
 
         System.out.println("Добавление задачи 1:");
         long idTask1 = taskManager.createTask(task1);
