@@ -8,7 +8,11 @@ import java.util.List;
 // Это менеджер, который управляет историей просмотров
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final List<Task> taskHistory = new ArrayList<>();
+    private final List<Task> taskHistory;
+
+    public InMemoryHistoryManager() {
+        this.taskHistory = new ArrayList<>();
+    }
 
     private static final int CAPACITY = 10;
     private static final byte OLDEST_INDEX_IN_HISTORY = 0;

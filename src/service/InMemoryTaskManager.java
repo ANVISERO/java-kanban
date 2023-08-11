@@ -254,6 +254,11 @@ public class InMemoryTaskManager implements TaskManager {
         return subtasksList;
     }
 
+    @Override
+    public List<Task> getHistory() {
+        return historyManager.getHistory();
+    }
+
     // Генерация идентификатора
     private long generateId() {
         return ++idGenerator;

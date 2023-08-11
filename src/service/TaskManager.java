@@ -65,4 +65,7 @@ public interface TaskManager {
 
     // Получение списка всех подзадач определённого эпика
     List<Subtask> getSubtasksByEpic(long epicId);
+
+    // Возвращает историю просмотренных задач
+    List<Task> getHistory();
 }

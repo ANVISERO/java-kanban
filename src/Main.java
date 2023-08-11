@@ -2,7 +2,6 @@ import model.Epic;
 import model.Status;
 import model.Subtask;
 import model.Task;
-import service.InMemoryTaskManager;
 import service.TaskManager;
 import util.Managers;
 
@@ -25,12 +24,14 @@ public class Main {
         System.out.println("Вывод задачи 1: " + taskManager.getTask(idTask1));
         System.out.println();
 
+        getHistory(taskManager);
 
         System.out.println("Добавление задачи 2:");
         long idTask2 = taskManager.createTask(task2);
         System.out.println("Вывод задачи 2: " + taskManager.getTask(idTask2));
         System.out.println();
 
+        getHistory(taskManager);
 
         tasks = taskManager.getTasksList();
         System.out.println("Вывод всех задач:");
@@ -50,6 +51,8 @@ public class Main {
         }
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Изменение статуса задачи 1 на NEW:");
         task1.setStatus(Status.NEW);
         taskManager.updateTask(task1);
@@ -60,6 +63,8 @@ public class Main {
             System.out.println(task);
         }
         System.out.println();
+
+        getHistory(taskManager);
 
         System.out.println("Изменение статуса задачи 1 на DONE:");
         task1.setStatus(Status.DONE);
@@ -72,6 +77,8 @@ public class Main {
         }
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Изменение статуса задачи 2 на IN_PROGRESS:");
         task2.setStatus(Status.IN_PROGRESS);
         taskManager.updateTask(task2);
@@ -83,16 +90,7 @@ public class Main {
         }
         System.out.println();
 
-        System.out.println("Изменение статуса задачи 2 на DONE:");
-        task2.setStatus(Status.DONE);
-        taskManager.updateTask(task2);
-        System.out.println("Вывод задачи 2: " + taskManager.getTask(idTask2));
-        tasks = taskManager.getTasksList();
-        System.out.println("Вывод всех задач:");
-        for (Task task : tasks) {
-            System.out.println(task);
-        }
-        System.out.println();
+        getHistory(taskManager);
 
         System.out.println("Изменение статуса задачи 2 на DONE:");
         task2.setStatus(Status.DONE);
@@ -104,6 +102,21 @@ public class Main {
             System.out.println(task);
         }
         System.out.println();
+
+        getHistory(taskManager);
+
+        System.out.println("Изменение статуса задачи 2 на DONE:");
+        task2.setStatus(Status.DONE);
+        taskManager.updateTask(task2);
+        System.out.println("Вывод задачи 2: " + taskManager.getTask(idTask2));
+        tasks = taskManager.getTasksList();
+        System.out.println("Вывод всех задач:");
+        for (Task task : tasks) {
+            System.out.println(task);
+        }
+        System.out.println();
+
+        getHistory(taskManager);
 
         System.out.println("Удаление задачи 1:");
         taskManager.deleteTask(idTask1);
@@ -115,10 +128,14 @@ public class Main {
         }
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Добавление задачи 1:");
         long idTask1New = taskManager.createTask(task1);
         System.out.println("Вывод задачи 1: " + taskManager.getTask(idTask1New));
         System.out.println();
+
+        getHistory(taskManager);
 
         tasks = taskManager.getTasksList();
         System.out.println("Вывод всех задач:");
@@ -145,12 +162,14 @@ public class Main {
         System.out.println("Вывод эпика 1: " + taskManager.getEpic(idEpic1));
         System.out.println();
 
+        getHistory(taskManager);
 
         System.out.println("Добавление эпика 2:");
         long idEpic2 = taskManager.createEpic(epic2);
         System.out.println("Вывод эпика 2: " + taskManager.getEpic(idEpic2));
         System.out.println();
 
+        getHistory(taskManager);
 
         epics = taskManager.getEpicsList();
         System.out.println("Вывод всех эпиков:");
@@ -165,11 +184,15 @@ public class Main {
         System.out.println("Вывод подзадачи 1: " + taskManager.getSubtask(idSubtask1));
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Добавление подзадачи 2:");
         Subtask subtask2 = new Subtask("subtask2", "descSubtask2", idEpic1);
         long idSubtask2 = taskManager.createSubtask(subtask2);
         System.out.println("Вывод подзадачи 2: " + taskManager.getSubtask(idSubtask2));
         System.out.println();
+
+        getHistory(taskManager);
 
         System.out.println("Добавление подзадачи 3:");
         Subtask subtask3 = new Subtask("subtask3", "descSubtask3", idEpic2);
@@ -177,11 +200,15 @@ public class Main {
         System.out.println("Вывод подзадачи 3: " + taskManager.getSubtask(idSubtask3));
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Добавление подзадачи 4:");
         Subtask subtask4 = new Subtask("subtask4", "descSubtask4", idEpic2);
         long idSubtask4 = taskManager.createSubtask(subtask4);
         System.out.println("Вывод подзадачи 4: " + taskManager.getSubtask(idSubtask4));
         System.out.println();
+
+        getHistory(taskManager);
 
         epics = taskManager.getEpicsList();
         System.out.println("Вывод всех эпиков:");
@@ -204,12 +231,16 @@ public class Main {
         System.out.println("Вывод эпика 1: " + taskManager.getEpic(idEpic1));
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Изменение статуса подзадачи 2 на IN_PROGRESS:");
         subtask2.setStatus(Status.IN_PROGRESS);
         taskManager.updateSubtask(subtask2);
         System.out.println("Вывод подзадачи 2: " + taskManager.getSubtask(idSubtask2));
         System.out.println("Вывод эпика 1: " + taskManager.getEpic(idEpic1));
         System.out.println();
+
+        getHistory(taskManager);
 
         System.out.println("Изменение статуса подзадачи 3 на DONE:");
         subtask3.setStatus(Status.DONE);
@@ -218,12 +249,16 @@ public class Main {
         System.out.println("Вывод эпика 2: " + taskManager.getEpic(idEpic2));
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Изменение статуса подзадачи 4 на DONE:");
         subtask4.setStatus(Status.DONE);
         taskManager.updateSubtask(subtask4);
         System.out.println("Вывод подзадачи 4: " + taskManager.getSubtask(idSubtask4));
         System.out.println("Вывод эпика 2: " + taskManager.getEpic(idEpic2));
         System.out.println();
+
+        getHistory(taskManager);
 
         System.out.println("Изменение статуса подзадачи 1 на NEW:");
         subtask1.setStatus(Status.NEW);
@@ -232,12 +267,16 @@ public class Main {
         System.out.println("Вывод эпика 1: " + taskManager.getEpic(idEpic1));
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Изменение статуса подзадачи 2 на NEW:");
         subtask2.setStatus(Status.NEW);
         taskManager.updateSubtask(subtask2);
         System.out.println("Вывод подзадачи 2: " + taskManager.getSubtask(idSubtask2));
         System.out.println("Вывод эпика 1: " + taskManager.getEpic(idEpic1));
         System.out.println();
+
+        getHistory(taskManager);
 
         epics = taskManager.getEpicsList();
         System.out.println("Вывод всех эпиков:");
@@ -259,12 +298,16 @@ public class Main {
         System.out.println("Вывод эпика 1: " + taskManager.getEpic(idEpic1));
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Добавление подзадачи 5:");
         Subtask subtask5 = new Subtask("subtask5", "descSubtask5", idEpic2);
         long idSubtask5 = taskManager.createSubtask(subtask5);
         System.out.println("Вывод подзадачи 5: " + taskManager.getSubtask(idSubtask5));
         System.out.println("Вывод эпика 2: " + taskManager.getEpic(idEpic2));
         System.out.println();
+
+        getHistory(taskManager);
 
         epics = taskManager.getEpicsList();
         System.out.println("Вывод всех эпиков:");
@@ -325,20 +368,28 @@ public class Main {
         System.out.println("Вывод подзадачи 1: " + taskManager.getSubtask(idSubtask1New));
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Добавление подзадачи 2:");
         long idSubtask2New = taskManager.createSubtask(subtask2);
         System.out.println("Вывод подзадачи 2: " + taskManager.getSubtask(idSubtask2New));
         System.out.println();
+
+        getHistory(taskManager);
 
         System.out.println("Добавление подзадачи 3:");
         long idSubtask3New = taskManager.createSubtask(subtask3);
         System.out.println("Вывод подзадачи 3: " + taskManager.getSubtask(idSubtask3New));
         System.out.println();
 
+        getHistory(taskManager);
+
         System.out.println("Добавление подзадачи 4:");
         long idSubtask4New = taskManager.createSubtask(subtask4);
         System.out.println("Вывод подзадачи 4: " + taskManager.getSubtask(idSubtask4New));
         System.out.println();
+
+        getHistory(taskManager);
 
         epics = taskManager.getEpicsList();
         System.out.println("Вывод всех эпиков:");
@@ -407,6 +458,16 @@ public class Main {
             for (Subtask subtask : subtasks) {
                 System.out.println(subtask);
             }
+        }
+        System.out.println();
+    }
+
+    private static void getHistory(TaskManager taskManager) {
+        System.out.println("Вывод истории задач:");
+        List<Task> taskHistory = taskManager.getHistory();
+        int i = 0;
+        for (Task task : taskHistory) {
+            System.out.println((++i) + ") " + task);
         }
         System.out.println();
     }
