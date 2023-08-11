@@ -5,12 +5,12 @@ public class Task {
     private String title; // Название
     private String description; // Описание
     private long id; // Уникальный идентификационный номер задачи
-    private String status; // Статус (NEW, IN_PROGRESS, DONE)
+    private Status status; // Статус (NEW, IN_PROGRESS, DONE)
 
     public Task(String title, String description) {
         this.title = title;
         this.description = description;
-        this.status = "NEW";
+        this.status = Status.NEW;
     }
 
     public String getTitle() {
@@ -37,11 +37,11 @@ public class Task {
         this.id = id;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

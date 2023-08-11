@@ -1,24 +1,28 @@
 package service;
 
 import model.Epic;
+import model.Status;
 import model.Subtask;
 import model.Task;
+import util.Managers;
 
-import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 // Это менеджер, который управляет всеми задачами
-public class InMemoryTaskManager implements TaskManager{
+public class InMemoryTaskManager implements TaskManager {
     private long idGenerator = 0;
     private final HashMap<Long, Task> tasks;
     private final HashMap<Long, Epic> epics;
     private final HashMap<Long, Subtask> subtasks;
+    private final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
         this.tasks = new HashMap<>();
         this.epics = new HashMap<>();
         this.subtasks = new HashMap<>();
+        historyManager = Managers.getDefaultHistory();
     }
 
     // Получение списка всех задач
@@ -41,7 +45,11 @@ public class InMemoryTaskManager implements TaskManager{
             System.out.println("Задачи с идентификатором " + taskId + " не существует!");
             return null;
         }
-        return tasks.get(taskId);
+
+        Task task = tasks.get(taskId);
+        historyManager.add(task);
+
+        return task;
     }
 
     // Создание задачи
@@ -98,7 +106,11 @@ public class InMemoryTaskManager implements TaskManager{
             System.out.println("Эпика с идентификатором " + epicId + " не существует!");
             return null;
         }
-        return epics.get(epicId);
+
+        Epic epic = epics.get(epicId);
+        historyManager.add(epic);
+
+        return epic;
     }
 
     // Создание эпика
@@ -166,7 +178,11 @@ public class InMemoryTaskManager implements TaskManager{
             System.out.println("Подзадачи с идентификатором " + subtaskId + " не существует!");
             return null;
         }
-        return subtasks.get(subtaskId);
+
+        Subtask subtask = subtasks.get(subtaskId);
+        historyManager.add(subtask);
+
+        return subtask;
     }
 
     // Создание подзадачи
@@ -246,14 +262,14 @@ public class InMemoryTaskManager implements TaskManager{
     private void updateEpicStatus(Epic epic) {
         List<Long> subtaskIds = epic.getSubtaskIds();
         if (subtaskIds.isEmpty()) {
-            epic.setStatus("NEW");
+            epic.setStatus(Status.NEW);
             epics.put(epic.getId(), epic);
             return;
         }
 
-        String status = null;
+        Status status = null;
         for (Long subtaskId : subtaskIds) {
-            String subtaskStatus = subtasks.get(subtaskId).getStatus();
+            Status subtaskStatus = subtasks.get(subtaskId).getStatus();
 
             if (status == null) {
                 status = subtaskStatus;
@@ -261,7 +277,7 @@ public class InMemoryTaskManager implements TaskManager{
             }
 
             if (!status.equals(subtaskStatus)) {
-                status = "IN_PROGRESS";
+                status = Status.IN_PROGRESS;
                 epic.setStatus(status);
                 epics.put(epic.getId(), epic);
                 return;

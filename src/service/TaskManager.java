@@ -6,6 +6,7 @@ import model.Task;
 
 import java.util.List;
 
+// Данный интерфейс отражает методы, которые должны быть у любого менеджера задач
 public interface TaskManager {
 
     // Получение списка всех задач
