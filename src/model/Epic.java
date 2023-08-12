@@ -1,21 +1,22 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 // Данный класс представляет эпик, который содержит подзадачи
 public class Epic extends Task {
-    private ArrayList<Long> subtaskIds;  // список с хранимым подзадачами
+    private List<Long> subtaskIds;  // список с хранимым подзадачами
 
     public Epic(String title, String description) {
         super(title, description);
         this.subtaskIds = new ArrayList<>();
     }
 
-    public ArrayList<Long> getSubtaskIds() {
+    public List<Long> getSubtaskIds() {
         return subtaskIds;
     }
 
-    public void setSubtaskIds(ArrayList<Long> subtaskIds) {
+    public void setSubtaskIds(List<Long> subtaskIds) {
         this.subtaskIds = subtaskIds;
     }
 

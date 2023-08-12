@@ -9,13 +9,14 @@ import util.Managers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 // Это менеджер, который управляет всеми задачами
 public class InMemoryTaskManager implements TaskManager {
     private long idGenerator = 0;
-    private final HashMap<Long, Task> tasks;
-    private final HashMap<Long, Epic> epics;
-    private final HashMap<Long, Subtask> subtasks;
+    private final Map<Long, Task> tasks;
+    private final Map<Long, Epic> epics;
+    private final Map<Long, Subtask> subtasks;
     private final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
