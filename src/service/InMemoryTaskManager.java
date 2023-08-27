@@ -35,6 +35,9 @@ public class InMemoryTaskManager implements TaskManager {
     // Удаление всех задач
     @Override
     public void deleteAllTasks() {
+        for (Long taskId : tasks.keySet()) {
+            historyManager.remove(taskId);
+        }
         tasks.clear();
         System.out.println("Все задачи успешно удалены!");
     }
@@ -82,6 +85,7 @@ public class InMemoryTaskManager implements TaskManager {
             System.out.println("Задачи с идентификатором " + taskId + " не существует!");
             return;
         }
+        historyManager.remove(taskId);
         tasks.remove(taskId);
         System.out.println("Задача с идентификатором " + taskId + " успешно удалена!");
     }
@@ -96,6 +100,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteAllEpics() {
         deleteAllSubtasks();
+        for (Long epicId : epics.keySet()) {
+            historyManager.remove(epicId);
+        }
         epics.clear();
         System.out.println("Все эпики успешно удалены!");
     }
@@ -148,9 +155,11 @@ public class InMemoryTaskManager implements TaskManager {
 
         List<Long> subtaskIds = epic.getSubtaskIds();
         for (Long subtaskId : subtaskIds) {
+            historyManager.remove(subtaskId);
             subtasks.remove(subtaskId);
         }
 
+        historyManager.remove(epicId);
         epics.remove(epicId);
         System.out.println("Эпик с идентификатором " + epicId + " успешно удалён!");
     }
@@ -167,7 +176,9 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic epic : epics.values()) {
             epic.clearSubtaskId();
         }
-
+        for (Long subtaskId : subtasks.keySet()) {
+            historyManager.remove(subtaskId);
+        }
         subtasks.clear();
         System.out.println("Все подзадачи успешно удалены!");
     }
@@ -231,6 +242,7 @@ public class InMemoryTaskManager implements TaskManager {
 
         Epic epic = epics.get(subtask.getEpicId());
         epic.deleteSubtaskId(subtaskId);
+        historyManager.remove(subtaskId);
         subtasks.remove(subtaskId);
         System.out.println("Задача с идентификатором " + subtaskId + " успешно удалена!");
         updateEpicStatus(epic);
