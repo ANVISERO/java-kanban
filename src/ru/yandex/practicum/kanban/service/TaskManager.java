@@ -1,8 +1,8 @@
-package service;
+package ru.yandex.practicum.kanban.service;
 
-import model.Epic;
-import model.Subtask;
-import model.Task;
+import ru.yandex.practicum.kanban.model.Epic;
+import ru.yandex.practicum.kanban.model.Subtask;
+import ru.yandex.practicum.kanban.model.Task;
 
 import java.util.List;
 

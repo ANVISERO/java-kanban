@@ -1,6 +1,6 @@
-package service;
+package ru.yandex.practicum.kanban.service;
 
-import model.Task;
+import ru.yandex.practicum.kanban.model.Task;
 
 import java.util.List;
 
@@ -9,6 +9,7 @@ public interface HistoryManager {
 
     // Помечает задачи как просмотренные
     void add(Task task);
+
     // Удаляет задачу из просмотра по id
     void remove(long id);
 

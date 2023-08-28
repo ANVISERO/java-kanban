@@ -1,4 +1,4 @@
-package model;
+package ru.yandex.practicum.kanban.model;
 
 // Данный класс представляет подзадачу, которая входит в состав эпика
 public class Subtask extends Task {

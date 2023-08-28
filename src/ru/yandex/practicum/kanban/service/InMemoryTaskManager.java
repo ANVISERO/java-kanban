@@ -1,10 +1,10 @@
-package service;
+package ru.yandex.practicum.kanban.service;
 
-import model.Epic;
-import model.Status;
-import model.Subtask;
-import model.Task;
-import util.Managers;
+import ru.yandex.practicum.kanban.model.Epic;
+import ru.yandex.practicum.kanban.model.Status;
+import ru.yandex.practicum.kanban.model.Subtask;
+import ru.yandex.practicum.kanban.model.Task;
+import ru.yandex.practicum.kanban.util.Managers;
 
 import java.util.ArrayList;
 import java.util.HashMap;

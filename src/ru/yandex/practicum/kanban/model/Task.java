@@ -1,4 +1,4 @@
-package model;
+package ru.yandex.practicum.kanban.model;
 
 // Данный класс представляет отдельно стоящую задачу
 public class Task {

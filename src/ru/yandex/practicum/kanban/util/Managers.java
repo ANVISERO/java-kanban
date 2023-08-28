@@ -1,9 +1,9 @@
-package util;
+package ru.yandex.practicum.kanban.util;
 
-import service.HistoryManager;
-import service.InMemoryHistoryManager;
-import service.InMemoryTaskManager;
-import service.TaskManager;
+import ru.yandex.practicum.kanban.service.HistoryManager;
+import ru.yandex.practicum.kanban.service.InMemoryHistoryManager;
+import ru.yandex.practicum.kanban.service.InMemoryTaskManager;
+import ru.yandex.practicum.kanban.service.TaskManager;
 
 // Утилитарный класс, который отвечает за создание менеджеров
 public class Managers {

@@ -1,7 +1,6 @@
-package service;
+package ru.yandex.practicum.kanban.service;
 
-import model.Task;
-import util.Node;
+import ru.yandex.practicum.kanban.model.Task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -66,7 +65,7 @@ public class InMemoryHistoryManager implements HistoryManager {
             if (oldTail == null) {
                 head = newNode;
             } else {
-                oldTail.next = newNode;
+                oldTail.setNext(newNode);
             }
             nodeMap.put(task.getId(), newNode);
             size++;
@@ -90,33 +89,33 @@ public class InMemoryHistoryManager implements HistoryManager {
                     history.remove(OLDEST_INDEX_IN_HISTORY);
                 }
 
-                history.add(currentNode.element);
-                currentNode = currentNode.next;
+                history.add(currentNode.getElement());
+                currentNode = currentNode.getNext();
             }
             return history;
         }
 
         // Вырезает узел переданный в параметр метода узел списка
         public void removeNode(Node node) {
-            final Node prev = node.prev;
-            final Node next = node.next;
+            final Node prev = node.getPrev();
+            final Node next = node.getNext();
 
             if (prev == null) {
                 head = next;
             } else {
-                prev.next = next;
-                node.prev = null;
+                prev.setNext(next);
+                node.setPrev(null);
             }
 
             if (next == null) {
                 tail = prev;
             } else {
-                next.prev = prev;
-                node.next = null;
+                next.setPrev(prev);
+                node.setNext(null);
             }
-            nodeMap.remove(node.element.getId());
+            nodeMap.remove(node.getElement().getId());
 
-            node.element = null;
+            node.setElement(null);
             size--;
         }
     }
