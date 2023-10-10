@@ -21,18 +21,23 @@ public class Epic extends Task {
     }
 
     // Добавление индекса в список индексов подзадач
-    public void addSubtaskId(long subtaskId) {
+    public void addSubtaskId(Long subtaskId) {
         subtaskIds.add(subtaskId);
     }
 
     // Удаление индекса из списка индексов подзадач
-    public void deleteSubtaskId(long subtaskId) {
+    public void deleteSubtaskId(Long subtaskId) {
         subtaskIds.remove(subtaskId);
     }
 
     // Очистка списка индексов подзадач
     public void clearSubtaskId() {
         subtaskIds.clear();
+    }
+
+    @Override
+    public TypeOfTask getType() {
+        return TypeOfTask.EPIC;
     }
 
     @Override

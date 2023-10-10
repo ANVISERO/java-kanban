@@ -2,19 +2,24 @@ package ru.yandex.practicum.kanban.model;
 
 // Данный класс представляет подзадачу, которая входит в состав эпика
 public class Subtask extends Task {
-    private long epicId; // поле для определения того, в каком эпике содержится данная задача
+    private Long epicId; // поле для определения того, в каком эпике содержится данная задача
 
-    public Subtask(String title, String description, long epicId) {
+    public Subtask(String title, String description, Long epicId) {
         super(title, description);
         this.epicId = epicId;
     }
 
-    public long getEpicId() {
+    public Long getEpicId() {
         return epicId;
     }
 
-    public void setEpicId(long epicId) {
+    public void setEpicId(Long epicId) {
         this.epicId = epicId;
+    }
+
+    @Override
+    public TypeOfTask getType() {
+        return TypeOfTask.SUBTASK;
     }
 
     @Override

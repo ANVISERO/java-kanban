@@ -4,7 +4,7 @@ package ru.yandex.practicum.kanban.model;
 public class Task {
     private String title; // Название
     private String description; // Описание
-    private long id; // Уникальный идентификационный номер задачи
+    private Long id; // Уникальный идентификационный номер задачи
     private Status status; // Статус (NEW, IN_PROGRESS, DONE)
 
     public Task(String title, String description) {
@@ -29,11 +29,11 @@ public class Task {
         this.description = description;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,6 +43,10 @@ public class Task {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public TypeOfTask getType() {
+        return TypeOfTask.TASK;
     }
 
     @Override

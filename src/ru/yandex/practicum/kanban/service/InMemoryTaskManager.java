@@ -13,17 +13,17 @@ import java.util.Map;
 
 // Это менеджер, который управляет всеми задачами
 public class InMemoryTaskManager implements TaskManager {
-    private long idGenerator = 0;
-    private final Map<Long, Task> tasks;
-    private final Map<Long, Epic> epics;
-    private final Map<Long, Subtask> subtasks;
+    private static long idGenerator = 0;
+    protected static Map<Long, Task> tasks;
+    protected static Map<Long, Subtask> subtasks;
+    protected static Map<Long, Epic> epics;
     private final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
-        this.tasks = new HashMap<>();
-        this.epics = new HashMap<>();
-        this.subtasks = new HashMap<>();
-        historyManager = Managers.getDefaultHistory();
+        tasks = new HashMap<>();
+        epics = new HashMap<>();
+        subtasks = new HashMap<>();
+        historyManager = Managers.getDefaultHistoryManager();
     }
 
     // Получение списка всех задач
@@ -220,7 +220,8 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask subtask) {
         if (!subtasks.containsKey(subtask.getId())) {
-            System.out.println("Подзадачи " + subtask.getTitle() + " с идентификатором " + subtask.getId() + " не существует!");
+            System.out.println("Подзадачи " + subtask.getTitle() + " с идентификатором " + subtask.getId()
+                    + " не существует!");
             return;
         }
 
@@ -272,9 +273,26 @@ public class InMemoryTaskManager implements TaskManager {
         return historyManager.getHistory();
     }
 
+    protected HistoryManager getHistoryManager() {
+        return historyManager;
+    }
+
     // Генерация идентификатора
     private long generateId() {
         return ++idGenerator;
+    }
+
+    // Установить значение id на котором остановился счёт
+    protected static void setId(Long id) {
+        idGenerator = id;
+    }
+
+    // Установить значение всех задач
+    protected static void setAllTasks(Map<Long, Task> tasksFromFile, Map<Long, Subtask> subtasksFromFile,
+                                      Map<Long, Epic> epicsFromFile) {
+        tasks = tasksFromFile;
+        subtasks = subtasksFromFile;
+        epics = epicsFromFile;
     }
 
     private void updateEpicStatus(Epic epic) {

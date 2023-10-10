@@ -1,9 +1,6 @@
 package ru.yandex.practicum.kanban.util;
 
-import ru.yandex.practicum.kanban.service.HistoryManager;
-import ru.yandex.practicum.kanban.service.InMemoryHistoryManager;
-import ru.yandex.practicum.kanban.service.InMemoryTaskManager;
-import ru.yandex.practicum.kanban.service.TaskManager;
+import ru.yandex.practicum.kanban.service.*;
 
 // Утилитарный класс, который отвечает за создание менеджеров
 public class Managers {
@@ -14,7 +11,12 @@ public class Managers {
     }
 
     // Создание реализации интерфейса HistoryManager (на данный момент это InMemoryHistoryManager)
-    public static HistoryManager getDefaultHistory() {
+    public static HistoryManager getDefaultHistoryManager() {
         return new InMemoryHistoryManager();
+    }
+
+    // Создание экземпляра класса, отвечающего за хранение данных в файле
+    public static FileBackedTasksManager getDefaultFileManager(final String path) {
+        return new FileBackedTasksManager(path);
     }
 }
