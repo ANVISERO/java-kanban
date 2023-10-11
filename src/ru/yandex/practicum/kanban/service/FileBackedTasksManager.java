@@ -26,103 +26,103 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void deleteAllTasks() throws ManagerSaveException {
+    public void deleteAllTasks() {
         super.deleteAllTasks();
         save();
     }
 
     @Override
-    public Task getTask(long taskId) throws ManagerSaveException {
+    public Task getTask(long taskId) {
         Task task = super.getTask(taskId);
         save();
         return task;
     }
 
     @Override
-    public long createTask(Task task) throws ManagerSaveException {
+    public long createTask(Task task) {
         long taskId = super.createTask(task);
         save();
         return taskId;
     }
 
     @Override
-    public void updateTask(Task task) throws ManagerSaveException {
+    public void updateTask(Task task) {
         super.updateTask(task);
         save();
     }
 
     @Override
-    public void deleteTask(long taskId) throws ManagerSaveException {
+    public void deleteTask(long taskId) {
         super.deleteTask(taskId);
         save();
     }
 
     @Override
-    public void deleteAllEpics() throws ManagerSaveException {
+    public void deleteAllEpics() {
         super.deleteAllEpics();
         save();
     }
 
     @Override
-    public Epic getEpic(long epicId) throws ManagerSaveException {
+    public Epic getEpic(long epicId) {
         Epic epic = super.getEpic(epicId);
         save();
         return epic;
     }
 
     @Override
-    public long createEpic(Epic epic) throws ManagerSaveException {
+    public long createEpic(Epic epic) {
         long epicId = super.createEpic(epic);
         save();
         return epicId;
     }
 
     @Override
-    public void updateEpic(Epic epic) throws ManagerSaveException {
+    public void updateEpic(Epic epic) {
         super.updateEpic(epic);
         save();
     }
 
     @Override
-    public void deleteEpic(long epicId) throws ManagerSaveException {
+    public void deleteEpic(long epicId) {
         super.deleteEpic(epicId);
         save();
     }
 
     @Override
-    public void deleteAllSubtasks() throws ManagerSaveException {
+    public void deleteAllSubtasks() {
         super.deleteAllSubtasks();
         save();
     }
 
     @Override
-    public Subtask getSubtask(long subtaskId) throws ManagerSaveException {
+    public Subtask getSubtask(long subtaskId) {
         Subtask subtask = super.getSubtask(subtaskId);
         save();
         return subtask;
     }
 
     @Override
-    public Long createSubtask(Subtask subtask) throws ManagerSaveException {
+    public Long createSubtask(Subtask subtask) {
         Long subtaskId = super.createSubtask(subtask);
         save();
         return subtaskId;
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) throws ManagerSaveException {
+    public void updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
         save();
     }
 
     @Override
-    public void deleteSubtask(long subtaskId) throws ManagerSaveException {
+    public void deleteSubtask(long subtaskId) {
         super.deleteSubtask(subtaskId);
         save();
     }
 
     // Данный метод сохраняет состояние программы в файл (задачи и историю)
-    private void save() throws ManagerSaveException {
+    private void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false))) {
             bufferedWriter.write(CSVFormatter.getHeader());
             bufferedWriter.newLine();
@@ -141,12 +141,12 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             bufferedWriter.newLine();
             bufferedWriter.write(CSVFormatter.historyToString(getHistoryManager()));
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка сохранения данных программы в файл!");
+            throw new ManagerSaveException("Ошибка сохранения данных программы в файл!" + e.getMessage());
         }
     }
 
-    public static FileBackedTasksManager loadFromFile(String path) throws ManagerSaveException {
-        FileBackedTasksManager fileBackedTasksManager = Managers.getDefaultFileManager(path);
+    public static FileBackedTasksManager loadFromFile(String path)  {
+        FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(path);
         Map<Long, Task> tasksFromFile = new HashMap<>();
         Map<Long, Subtask> subtasksFromFile = new HashMap<>();
         Map<Long, Epic> epicsFromFile = new HashMap<>();
@@ -155,7 +155,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         try {
             List<String> lines = Files.readAllLines(Path.of(path));
             if (lines.isEmpty()) {
-                return Managers.getDefaultFileManager(path);
+                return new FileBackedTasksManager(path);
             }
             for (String line : lines) {
                 if (line.equals("id,type,name,status,description,epic")) {
