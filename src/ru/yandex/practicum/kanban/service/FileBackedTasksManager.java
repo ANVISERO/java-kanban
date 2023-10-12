@@ -5,7 +5,6 @@ import ru.yandex.practicum.kanban.model.Subtask;
 import ru.yandex.practicum.kanban.model.Task;
 import ru.yandex.practicum.kanban.model.TypeOfTask;
 import ru.yandex.practicum.kanban.service.exceptions.ManagerSaveException;
-import ru.yandex.practicum.kanban.util.Managers;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -145,7 +144,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         }
     }
 
-    public static FileBackedTasksManager loadFromFile(String path)  {
+    public static FileBackedTasksManager loadFromFile(String path) {
         FileBackedTasksManager fileBackedTasksManager = new FileBackedTasksManager(path);
         Map<Long, Task> tasksFromFile = new HashMap<>();
         Map<Long, Subtask> subtasksFromFile = new HashMap<>();
@@ -183,7 +182,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 }
             }
         } catch (IOException | NullPointerException e) {
-            throw new ManagerSaveException("Ошибка восстановления данных программы из файла!");
+            throw new ManagerSaveException("Ошибка восстановления данных программы из файла!" + e.getMessage());
         }
         setId(maxId);
         setAllTasks(tasksFromFile, subtasksFromFile, epicsFromFile);
