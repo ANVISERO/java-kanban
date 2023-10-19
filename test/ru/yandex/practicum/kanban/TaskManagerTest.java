@@ -14,17 +14,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
     protected T taskManager;
+    private Task task1;
+    private Task task2;
+    private Task task3;
+    private Epic epic1;
+    private Epic epic2;
+    private Subtask subtask1;
+    private Subtask subtask2;
+    private Subtask subtask3;
+    private Subtask subtask4;
+
 
     @BeforeEach
-    public void beforeEach() {
+    public void setup() {
         setTaskManager();
+        initTestDataForTasks();
+        initTestDataForEpicsAndSubtasks();
     }
 
     @Test
     public void testGetTasksListStandardBehavior() {
-        Task task1 = new Task("Task1", "descriptionTask1");
-        Task task2 = new Task("Task2", "descriptionTask2");
-        Task task3 = new Task("Task3", "descriptionTask3");
         taskManager.createTask(task1);
         taskManager.createTask(task2);
         taskManager.createTask(task3);
@@ -48,9 +57,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testDeleteAllTasksStandardBehavior() {
-        Task task1 = new Task("Task1", "descriptionTask1");
-        Task task2 = new Task("Task2", "descriptionTask2");
-        Task task3 = new Task("Task3", "descriptionTask3");
         taskManager.createTask(task1);
         taskManager.createTask(task2);
         taskManager.createTask(task3);
@@ -75,9 +81,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testGetTaskStandardBehavior() {
-        Task task1 = new Task("Task1", "descriptionTask1");
-        Task task2 = new Task("Task2", "descriptionTask2");
-        Task task3 = new Task("Task3", "descriptionTask3");
         final int taskId1 = taskManager.createTask(task1);
         final int taskId2 = taskManager.createTask(task2);
         final int taskId3 = taskManager.createTask(task3);
@@ -92,9 +95,6 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testGetTaskWithInvalidTaskIDThrowsIllegalArgumentException() {
-        Task task1 = new Task("Task1", "descriptionTask1");
-        Task task2 = new Task("Task2", "descriptionTask2");
-        Task task3 = new Task("Task3", "descriptionTask3");
         taskManager.createTask(task1);
         taskManager.createTask(task2);
         taskManager.createTask(task3);
@@ -123,29 +123,26 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testUpdateTaskStandardBehavior() {
-        Task task = new Task("Task", "descriptionTask");
-        final int taskId = taskManager.createTask(task);
+        final int taskId = taskManager.createTask(task1);
 
-        task.setStatus(Status.DONE);
-        task.setDescription("moreDescriptionTask");
-        taskManager.updateTask(task);
+        task1.setStatus(Status.DONE);
+        task1.setDescription("moreDescriptionTask");
+        taskManager.updateTask(task1);
 
         final Task updatedTask = taskManager.getTask(taskId);
 
         assertNotNull(updatedTask, "Задача не найдена.");
-        assertEquals(task, updatedTask, "Задачи не совпадают.");
+        assertEquals(task1, updatedTask, "Задачи не совпадают.");
 
         final List<Task> tasks = taskManager.getTasksList();
 
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Неверное количество задач.");
-        assertEquals(task, tasks.get(0), "Задачи не совпадают.");
+        assertEquals(task1, tasks.get(0), "Задачи не совпадают.");
     }
 
     @Test
     public void testUpdateTaskWithInvalidTaskIDThrowsIllegalArgumentException() {
-        Task task1 = new Task("Task1", "descriptionTask1");
-        Task task2 = new Task("Task2", "descriptionTask2");
         task2.setId(12);
         taskManager.createTask(task1);
 
@@ -156,8 +153,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testDeleteTaskStandardBehavior() {
-        Task task = new Task("Task", "descriptionTask");
-        final int taskId = taskManager.createTask(task);
+        final int taskId = taskManager.createTask(task1);
 
         taskManager.deleteTask(taskId);
 
@@ -169,8 +165,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testDeleteTaskWithInvalidTaskIDThrowsIllegalArgumentException() {
-        Task task = new Task("Task", "descriptionTask");
-        taskManager.createTask(task);
+        taskManager.createTask(task1);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> taskManager.deleteTask(12));
@@ -179,14 +174,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testGetEpicsListStandardBehavior() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
-        final int epicId1 = taskManager.createEpic(epic1);
-        final int epicId2 = taskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
-        Subtask subtask3 = new Subtask("subtask3", "descSubtask3", epicId2);
-        Subtask subtask4 = new Subtask("subtask4", "descSubtask4", epicId2);
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
         taskManager.createSubtask(subtask3);
@@ -222,14 +211,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testDeleteAllEpicsStandardBehavior() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
-        final int epicId1 = taskManager.createEpic(epic1);
-        final int epicId2 = taskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
-        Subtask subtask3 = new Subtask("subtask3", "descSubtask3", epicId2);
-        Subtask subtask4 = new Subtask("subtask4", "descSubtask4", epicId2);
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
         taskManager.createSubtask(subtask3);
@@ -261,35 +244,23 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testGetEpicStandardBehavior() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
-        final int epicId1 = taskManager.createEpic(epic1);
-        final int epicId2 = taskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
-        Subtask subtask3 = new Subtask("subtask3", "descSubtask3", epicId2);
-        Subtask subtask4 = new Subtask("subtask4", "descSubtask4", epicId2);
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
         taskManager.createSubtask(subtask3);
         taskManager.createSubtask(subtask4);
 
-        assertNotNull(taskManager.getEpic(epicId1), "Эпик с идентификатором " + epicId1 + " не найден.");
-        assertNotNull(taskManager.getEpic(epicId2), "Эпик с идентификатором " + epicId2 + " не найден.");
-        assertEquals(epic1, taskManager.getEpic(epicId1), "Эпики не совпадают.");
-        assertEquals(epic2, taskManager.getEpic(epicId2), "Эпики не совпадают.");
+        assertNotNull(taskManager.getEpic(1), "Эпик с идентификатором " + 1 + " не найден.");
+        assertNotNull(taskManager.getEpic(2), "Эпик с идентификатором " + 2 + " не найден.");
+        assertEquals(epic1, taskManager.getEpic(1), "Эпики не совпадают.");
+        assertEquals(epic2, taskManager.getEpic(2), "Эпики не совпадают.");
     }
 
     @Test
     public void testGetEpicWithInvalidEpicIDThrowsIllegalArgumentException() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
-        final int epicId1 = taskManager.createEpic(epic1);
-        final int epicId2 = taskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
-        Subtask subtask3 = new Subtask("subtask3", "descSubtask3", epicId2);
-        Subtask subtask4 = new Subtask("subtask4", "descSubtask4", epicId2);
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
         taskManager.createSubtask(subtask3);
@@ -302,46 +273,42 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testCreateEpic() {
-        Epic epic = new Epic("epic", "descEpic");
-        final int epicId = taskManager.createEpic(epic);
+        taskManager.createEpic(epic1);
 
-        final Epic savedEpic = taskManager.getEpic(epicId);
+        final Epic savedEpic = taskManager.getEpic(1);
 
         assertNotNull(savedEpic, "Эпик не найден.");
-        assertEquals(epic, savedEpic, "Эпики не совпадают.");
+        assertEquals(epic1, savedEpic, "Эпики не совпадают.");
 
         final List<Epic> epics = taskManager.getEpicsList();
 
         assertNotNull(epics, "Эпики не возвращаются.");
         assertEquals(1, epics.size(), "Неверное количество эпиков.");
-        assertEquals(epic, epics.get(0), "Эпики не совпадают.");
+        assertEquals(epic1, epics.get(0), "Эпики не совпадают.");
     }
 
     @Test
     public void testUpdateEpicStandardBehavior() {
-        Epic epic = new Epic("epic", "descEpic");
-        final int epicId = taskManager.createEpic(epic);
+        final int epicId = taskManager.createEpic(epic1);
 
-        epic.setStatus(Status.DONE);
+        epic1.setStatus(Status.DONE);
 
-        taskManager.updateEpic(epic);
+        taskManager.updateEpic(epic1);
 
         final Epic updatedEpic = taskManager.getEpic(epicId);
 
         assertNotNull(updatedEpic, "Эпик не найдена.");
-        assertEquals(epic, updatedEpic, "Эпики не совпадают.");
+        assertEquals(epic1, updatedEpic, "Эпики не совпадают.");
 
         final List<Epic> epics = taskManager.getEpicsList();
 
         assertNotNull(epics, "Эпики не возвращаются.");
         assertEquals(1, epics.size(), "Неверное количество эпиков.");
-        assertEquals(epic, epics.get(0), "Эпики не совпадают.");
+        assertEquals(epic1, epics.get(0), "Эпики не совпадают.");
     }
 
     @Test
     public void testUpdateEpicWithInvalidEpicIDThrowsIllegalArgumentException() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
         taskManager.createEpic(epic1);
 
         epic2.setStatus(Status.DONE);
@@ -354,8 +321,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testDeleteEpicStandardBehavior() {
-        Epic epic = new Epic("epic", "descEpic");
-        final int epicId = taskManager.createEpic(epic);
+        final int epicId = taskManager.createEpic(epic1);
 
         taskManager.deleteEpic(epicId);
 
@@ -370,8 +336,7 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testDeleteEpicWithInvalidEpicIDThrowsIllegalArgumentException() {
-        Epic epic = new Epic("epic", "descEpic");
-        taskManager.createEpic(epic);
+        taskManager.createEpic(epic1);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> taskManager.deleteEpic(12));
@@ -380,14 +345,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testGetSubtasksListStandardBehavior() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
-        final int epicId1 = taskManager.createEpic(epic1);
-        final int epicId2 = taskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
-        Subtask subtask3 = new Subtask("subtask3", "descSubtask3", epicId2);
-        Subtask subtask4 = new Subtask("subtask4", "descSubtask4", epicId2);
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
         taskManager.createSubtask(subtask3);
@@ -412,14 +371,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testDeleteAllSubtasksStandardBehavior() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
-        final int epicId1 = taskManager.createEpic(epic1);
-        final int epicId2 = taskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
-        Subtask subtask3 = new Subtask("subtask3", "descSubtask3", epicId2);
-        Subtask subtask4 = new Subtask("subtask4", "descSubtask4", epicId2);
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
         taskManager.createSubtask(subtask3);
@@ -432,25 +385,25 @@ public abstract class TaskManagerTest<T extends TaskManager> {
         assertNotNull(subtasks, "Подзадачи не возвращаются или не возвращается пустой список подзадач.");
         assertTrue(subtasks.isEmpty(), "Подзадачи не были удалены.");
 
-        assertNotNull(taskManager.getEpic(epicId1).getSubtaskIds(),
+        assertNotNull(taskManager.getEpic(1).getSubtaskIds(),
                 "Список идентификаторов подзадач не возвращаются или не возвращается пустой список " +
                         "идентификаторов подзадач.");
-        assertTrue(taskManager.getEpic(epicId1).getSubtaskIds().isEmpty(),
+        assertTrue(taskManager.getEpic(1).getSubtaskIds().isEmpty(),
                 "Список идентификаторов подзадач не был удалён.");
-        assertNotNull(taskManager.getEpic(epicId1).getSubtaskIds(),
+        assertNotNull(taskManager.getEpic(1).getSubtaskIds(),
                 "Список идентификаторов подзадач не возвращаются или не возвращается пустой список " +
                         "идентификаторов подзадач.");
-        assertTrue(taskManager.getEpic(epicId1).getSubtaskIds().isEmpty(),
+        assertTrue(taskManager.getEpic(1).getSubtaskIds().isEmpty(),
                 "Список идентификаторов подзадач не был удалён.");
-        assertNotNull(taskManager.getEpic(epicId2).getSubtaskIds(),
+        assertNotNull(taskManager.getEpic(2).getSubtaskIds(),
                 "Список идентификаторов подзадач не возвращаются или не возвращается пустой список " +
                         "идентификаторов подзадач.");
-        assertTrue(taskManager.getEpic(epicId2).getSubtaskIds().isEmpty(),
+        assertTrue(taskManager.getEpic(2).getSubtaskIds().isEmpty(),
                 "Список идентификаторов подзадач не был удалён.");
-        assertNotNull(taskManager.getEpic(epicId2).getSubtaskIds(),
+        assertNotNull(taskManager.getEpic(2).getSubtaskIds(),
                 "Список идентификаторов подзадач не возвращаются или не возвращается пустой список " +
                         "идентификаторов подзадач.");
-        assertTrue(taskManager.getEpic(epicId2).getSubtaskIds().isEmpty(),
+        assertTrue(taskManager.getEpic(2).getSubtaskIds().isEmpty(),
                 "Список идентификаторов подзадач не был удалён.");
     }
 
@@ -466,18 +419,12 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testGetSubtaskStandardBehavior() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
-        final int epicId1 = taskManager.createEpic(epic1);
-        final int epicId2 = taskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
-        Subtask subtask3 = new Subtask("subtask3", "descSubtask3", epicId2);
-        Subtask subtask4 = new Subtask("subtask4", "descSubtask4", epicId2);
-        int subtaskId1 = taskManager.createSubtask(subtask1);
-        int subtaskId2 = taskManager.createSubtask(subtask2);
-        int subtaskId3 = taskManager.createSubtask(subtask3);
-        int subtaskId4 = taskManager.createSubtask(subtask4);
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
+        final int subtaskId1 = taskManager.createSubtask(subtask1);
+        final int subtaskId2 = taskManager.createSubtask(subtask2);
+        final int subtaskId3 = taskManager.createSubtask(subtask3);
+        final int subtaskId4 = taskManager.createSubtask(subtask4);
 
         assertNotNull(taskManager.getSubtask(subtaskId1), "Подзадача с идентификатором " + subtaskId1
                 + " не найдена.");
@@ -495,14 +442,8 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testGetSubtaskWithInvalidSubtaskIDThrowsIllegalArgumentException() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        Epic epic2 = new Epic("epic2", "descEpic2");
-        final int epicId1 = taskManager.createEpic(epic1);
-        final int epicId2 = taskManager.createEpic(epic2);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
-        Subtask subtask3 = new Subtask("subtask3", "descSubtask3", epicId2);
-        Subtask subtask4 = new Subtask("subtask4", "descSubtask4", epicId2);
+        taskManager.createEpic(epic1);
+        taskManager.createEpic(epic2);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
         taskManager.createSubtask(subtask3);
@@ -515,19 +456,17 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testCreateSubtaskStandardBehavior() {
-        Epic epic = new Epic("epic", "descEpic");
-        final int epicId = taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("subtask", "descSubtask", epicId);
-        final int subtaskId = taskManager.createSubtask(subtask);
+        taskManager.createEpic(epic1);
+        final int subtaskId1 = taskManager.createSubtask(subtask1);
 
-        final Subtask savedSubtask = taskManager.getSubtask(subtaskId);
+        final Subtask savedSubtask = taskManager.getSubtask(subtaskId1);
 
         assertNotNull(savedSubtask, "Подзадача не найдена.");
-        assertEquals(subtask, savedSubtask, "Подзадачи не совпадают.");
+        assertEquals(subtask1, savedSubtask, "Подзадачи не совпадают.");
 
-        final Epic epic1 = taskManager.getEpic(epicId);
+        final Epic epic = taskManager.getEpic(1);
 
-        assertTrue(epic1.getSubtaskIds().contains(subtaskId),
+        assertTrue(epic.getSubtaskIds().contains(subtaskId1),
                 "Данная подзадача не привязана ни к какому эпику!");
 
         final List<Subtask> subtasks = taskManager.getSubtasksList();
@@ -546,25 +485,23 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testUpdateSubtaskStandardBehavior() {
-        Epic epic = new Epic("epic", "descEpic");
-        final int epicId = taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("subtask", "descSubtask", epicId);
-        final int subtaskId = taskManager.createSubtask(subtask);
+        taskManager.createEpic(epic1);
+        final int subtaskId1 = taskManager.createSubtask(subtask1);
 
-        subtask.setStatus(Status.DONE);
+        subtask1.setStatus(Status.DONE);
 
-        taskManager.updateSubtask(subtask);
+        taskManager.updateSubtask(subtask1);
 
-        final Subtask updatedSubtask = taskManager.getSubtask(subtaskId);
+        final Subtask updatedSubtask = taskManager.getSubtask(subtaskId1);
 
         assertNotNull(updatedSubtask, "Подзадача не найдена.");
-        assertEquals(subtask, updatedSubtask, "Подзадачи не совпадают.");
+        assertEquals(subtask1, updatedSubtask, "Подзадачи не совпадают.");
 
         final List<Subtask> subtasks = taskManager.getSubtasksList();
 
         assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertEquals(1, subtasks.size(), "Неверное количество подзадач.");
-        assertEquals(subtask, subtasks.get(0), "Подзадачи не совпадают.");
+        assertEquals(subtask1, subtasks.get(0), "Подзадачи не совпадают.");
 
         Epic updatedEpic = taskManager.getEpic(updatedSubtask.getEpicId());
         assertEquals(Status.DONE, updatedEpic.getStatus(), "Статус эпика не обновляется.");
@@ -572,47 +509,41 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testUpdateSubtaskWithInvalidSubtaskIDThrowsIllegalArgumentException() {
-        Epic epic = new Epic("epic", "descEpic");
-        final int epicId = taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("subtask", "descSubtask", epicId);
-        taskManager.createSubtask(subtask);
+        taskManager.createEpic(epic1);
+        taskManager.createSubtask(subtask1);
 
-        subtask.setStatus(Status.DONE);
+        subtask1.setStatus(Status.DONE);
 
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", 6);
-        subtask1.setId(12);
+        Subtask subtask = new Subtask("subtask1", "descSubtask1", 6);
+        subtask.setId(12);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> taskManager.updateSubtask(subtask1));
+                () -> taskManager.updateSubtask(subtask));
         assertEquals("Подзадачи с идентификатором 12 не существует!", exception.getMessage());
     }
 
     @Test
     public void testDeleteSubtaskStandardBehavior() {
-        Epic epic = new Epic("epic", "descEpic");
-        final int epicId = taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("subtask", "descSubtask", epicId);
-        final int subtaskId = taskManager.createSubtask(subtask);
+        taskManager.createEpic(epic1);
+        final int subtaskId1 = taskManager.createSubtask(subtask1);
 
-        taskManager.deleteSubtask(subtaskId);
+        taskManager.deleteSubtask(subtaskId1);
 
-        final List<Subtask> subtasks = taskManager.getSubtasksByEpic(epicId);
+        final List<Subtask> subtasks = taskManager.getSubtasksByEpic(1);
 
         assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertTrue(subtasks.isEmpty(), "Подзадачи не были удалены.");
 
-        final Epic epic1 = taskManager.getEpic(epicId);
+        final Epic epic1 = taskManager.getEpic(1);
 
-        assertFalse(epic1.getSubtaskIds().contains(subtaskId),
+        assertFalse(epic1.getSubtaskIds().contains(subtaskId1),
                 "Идентификатор подзадачи не удалён из списка идентификаторов эпика!");
     }
 
     @Test
     public void testDeleteSubtaskWithInvalidSubtaskIDThrowsIllegalArgumentException() {
-        Epic epic = new Epic("epic", "descEpic");
-        final int epicId = taskManager.createEpic(epic);
-        Subtask subtask = new Subtask("subtask", "descSubtask", epicId);
-        taskManager.createSubtask(subtask);
+        taskManager.createEpic(epic1);
+        taskManager.createSubtask(subtask1);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> taskManager.deleteSubtask(12));
@@ -621,14 +552,11 @@ public abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     public void testGetSubtaskByEpic() {
-        Epic epic1 = new Epic("epic1", "descEpic1");
-        final int epicId1 = taskManager.createEpic(epic1);
-        Subtask subtask1 = new Subtask("subtask1", "descSubtask1", epicId1);
-        Subtask subtask2 = new Subtask("subtask2", "descSubtask2", epicId1);
+        taskManager.createEpic(epic1);
         taskManager.createSubtask(subtask1);
         taskManager.createSubtask(subtask2);
 
-        List<Subtask> subtasksByEpic = taskManager.getSubtasksByEpic(epicId1);
+        List<Subtask> subtasksByEpic = taskManager.getSubtasksByEpic(1);
 
         assertNotNull(subtasksByEpic, "Список подзадач эпика не найден.");
         assertEquals(subtask1, subtasksByEpic.get(0), "Подзадачи не совпадают.");
@@ -636,4 +564,19 @@ public abstract class TaskManagerTest<T extends TaskManager> {
     }
 
     abstract void setTaskManager();
+
+    private void initTestDataForTasks() {
+        task1 = new Task("Task1", "descriptionTask1");
+        task2 = new Task("Task2", "descriptionTask2");
+        task3 = new Task("Task3", "descriptionTask3");
+    }
+
+    private void initTestDataForEpicsAndSubtasks() {
+        epic1 = new Epic("epic1", "descEpic1");
+        epic2 = new Epic("epic2", "descEpic2");
+        subtask1 = new Subtask("subtask1", "descSubtask1", 1);
+        subtask2 = new Subtask("subtask2", "descSubtask2", 1);
+        subtask3 = new Subtask("subtask3", "descSubtask3", 2);
+        subtask4 = new Subtask("subtask4", "descSubtask4", 2);
+    }
 }

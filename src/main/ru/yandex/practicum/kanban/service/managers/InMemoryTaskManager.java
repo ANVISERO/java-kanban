@@ -13,7 +13,7 @@ import java.util.*;
 
 // Это менеджер, который управляет всеми задачами
 public class InMemoryTaskManager implements TaskManager {
-    private static int idGenerator = 0;
+    private static int idGenerator;
     protected static Map<Integer, Task> tasks;
     protected static Map<Integer, Subtask> subtasks;
     protected static Map<Integer, Epic> epics;
@@ -21,6 +21,7 @@ public class InMemoryTaskManager implements TaskManager {
     private final HistoryManager historyManager;
 
     public InMemoryTaskManager() {
+        idGenerator = 0;
         tasks = new HashMap<>();
         epics = new HashMap<>();
         subtasks = new HashMap<>();

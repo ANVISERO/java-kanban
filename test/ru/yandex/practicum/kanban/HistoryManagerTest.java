@@ -13,17 +13,20 @@ import static org.junit.jupiter.api.Assertions.*;
 public class HistoryManagerTest {
 
     private static HistoryManager historyManager;
+    private static Task task1;
+    private static Task task2;
+    private static Task task3;
 
     @BeforeEach
-    public void beforeEach() {
-        historyManager = Managers.getDefaultHistoryManager();
+    public void setup() {
+        setHistoryManager();
+        initTestDataForTasks();
     }
 
     @Test
     void testAddTaskToHistory() {
-        Task task = new Task("Task", "descriptionTask");
-        task.setId(12);
-        historyManager.add(task);
+        task1.setId(12);
+        historyManager.add(task1);
         final List<Task> history = historyManager.getHistory();
         assertNotNull(history, "История пустая, но не должна быть таковой.");
         assertEquals(1, history.size(), "Количество элементов в истории должно быть равно 1.");
@@ -38,10 +41,9 @@ public class HistoryManagerTest {
 
     @Test
     void testAddTwoSameTasksToHistory() {
-        Task task = new Task("Task", "descriptionTask");
-        task.setId(12);
-        historyManager.add(task);
-        historyManager.add(task);
+        task1.setId(12);
+        historyManager.add(task1);
+        historyManager.add(task1);
         final List<Task> history = historyManager.getHistory();
         assertNotNull(history, "История пустая, но не должна быть таковой.");
         assertEquals(1, history.size(), "Неверное количество элементов в истории.");
@@ -49,13 +51,10 @@ public class HistoryManagerTest {
 
     @Test
     public void testDeleteTaskFromTheBeginningOfTheHistory() {
-        Task task1 = new Task("Task1", "descriptionTask1");
         task1.setId(1);
         historyManager.add(task1);
-        Task task2 = new Task("Task2", "descriptionTask2");
         task2.setId(2);
         historyManager.add(task2);
-        Task task3 = new Task("Task3", "descriptionTask3");
         task3.setId(3);
         historyManager.add(task3);
         historyManager.remove(1);
@@ -66,13 +65,10 @@ public class HistoryManagerTest {
 
     @Test
     public void testDeleteTaskFromTheMiddleOfTheHistory() {
-        Task task1 = new Task("Task1", "descriptionTask1");
         task1.setId(1);
         historyManager.add(task1);
-        Task task2 = new Task("Task2", "descriptionTask2");
         task2.setId(2);
         historyManager.add(task2);
-        Task task3 = new Task("Task3", "descriptionTask3");
         task3.setId(3);
         historyManager.add(task3);
         historyManager.remove(2);
@@ -83,13 +79,10 @@ public class HistoryManagerTest {
 
     @Test
     public void testDeleteTaskFromTheEndOfTheHistory() {
-        Task task1 = new Task("Task1", "descriptionTask1");
         task1.setId(1);
         historyManager.add(task1);
-        Task task2 = new Task("Task2", "descriptionTask2");
         task2.setId(2);
         historyManager.add(task2);
-        Task task3 = new Task("Task3", "descriptionTask3");
         task3.setId(3);
         historyManager.add(task3);
         historyManager.remove(3);
@@ -98,4 +91,13 @@ public class HistoryManagerTest {
         assertEquals(2, history.size(), "Неверное количество элементов в истории.");
     }
 
+    void setHistoryManager() {
+        historyManager = Managers.getDefaultHistoryManager();
+    }
+
+    private void initTestDataForTasks() {
+        task1 = new Task("Task1", "descriptionTask1");
+        task2 = new Task("Task2", "descriptionTask2");
+        task3 = new Task("Task3", "descriptionTask3");
+    }
 }
