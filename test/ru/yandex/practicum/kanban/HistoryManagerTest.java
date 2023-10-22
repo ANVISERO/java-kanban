@@ -1,5 +1,7 @@
 package ru.yandex.practicum.kanban;
 
+import main.ru.yandex.practicum.kanban.model.Epic;
+import main.ru.yandex.practicum.kanban.model.Subtask;
 import main.ru.yandex.practicum.kanban.model.Task;
 import main.ru.yandex.practicum.kanban.service.managers.HistoryManager;
 import main.ru.yandex.practicum.kanban.util.Managers;

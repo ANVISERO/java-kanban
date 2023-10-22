@@ -122,7 +122,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     // Данный метод сохраняет состояние программы в файл (задачи и историю)
-    private void save() {
+    protected void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(path, false))) {
             bufferedWriter.write(CSVFormatter.getHeader());
             bufferedWriter.newLine();

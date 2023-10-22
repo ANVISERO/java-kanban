@@ -77,6 +77,4 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         assertFalse(newFileBackedTasksManager.getHistory().isEmpty(),
                 "Предполагалась загрузка в программу пустой истории, но что то пошло не так.");
     }
-
-
 }
