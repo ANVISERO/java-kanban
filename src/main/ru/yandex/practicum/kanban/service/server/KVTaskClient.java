@@ -13,7 +13,6 @@ public class KVTaskClient {
 
     private String apiToken;
     private final HttpClient httpClient;
-    URI uri;
 
     public KVTaskClient(final String uri) {
         this.httpClient = HttpClient.newHttpClient();
@@ -29,7 +28,7 @@ public class KVTaskClient {
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
             HttpResponse<Void> putResponse = httpClient.send(putRequest, HttpResponse.BodyHandlers.discarding());
-            if (!(putResponse.statusCode() == 200)) {
+            if (putResponse.statusCode() != 200) {
                 throw new KVTaskClientException("Не удалось сохранить состояние менеджера задач на KVServer.\n" +
                         "Код ответа: " + putResponse.statusCode());
             }

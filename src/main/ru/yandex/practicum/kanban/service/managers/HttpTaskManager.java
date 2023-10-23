@@ -19,11 +19,12 @@ public class HttpTaskManager extends FileBackedTasksManager {
     private static final String SUBTASKS = "subtasks";
     private static final String EPICS = "epics";
     private static final String HISTORY = "history";
-    private static final Gson gson = new GsonBuilder().create();
+    private static Gson gson;
 
     public HttpTaskManager(final String uri) {
         super(uri);
         this.kvTaskClient = new KVTaskClient(uri);
+        gson = new GsonBuilder().create();
     }
 
     @Override

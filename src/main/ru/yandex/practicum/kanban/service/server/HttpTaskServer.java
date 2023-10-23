@@ -22,104 +22,105 @@ public class HttpTaskServer {
     public static final int PORT = 8080;
     private final HttpServer server;
     private final HttpTaskManager httpTaskManager;
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static Gson gson;
 
 
     public HttpTaskServer() throws IOException {
+        gson = new GsonBuilder().create();
         server = HttpServer.create(new InetSocketAddress("localhost", PORT), 0);
         this.httpTaskManager = (HttpTaskManager) Managers.getDefault();
         server.createContext("/tasks", this::handle);
     }
 
-    private void handle(HttpExchange h) throws IOException {
+    private void handle(HttpExchange exchange) throws IOException {
         try {
             String path = "";
             String key = "";
             String body = "";
             String json = "";
-            switch (h.getRequestMethod()) {
+            switch (exchange.getRequestMethod()) {
                 case "GET":
-                    path = extractPath(h);
-                    key = extractKey(h);
+                    path = extractPath(exchange);
+                    key = extractKey(exchange);
                     if (path.isEmpty() && key.isEmpty()) {
                         Set<Task> prioritizedTasks = httpTaskManager.getPrioritizedTasks();
                         if (prioritizedTasks == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(prioritizedTasks, new TypeToken<Set<Task>>() {}.getType());
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else if ("task".equals(path) && key.isEmpty()) {
                         List<Task> tasks = httpTaskManager.getTasksList();
                         if (tasks == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(tasks, new TypeToken<List<Task>>() {}.getType());
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else if ("task".equals(path)) {
                         Task task = httpTaskManager.getTask(Integer.parseInt(key));
                         if (task == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(task);
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else if ("history".equals(path)) {
                         List<Task> history = httpTaskManager.getHistory();
                         if (history == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(history, new TypeToken<List<Task>>() {}.getType());
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else if ("subtask".equals(path) && key.isEmpty()) {
                         List<Subtask> subtasks = httpTaskManager.getSubtasksList();
                         if (subtasks == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(subtasks, new TypeToken<List<Subtask>>() {}.getType());
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else if ("subtask".equals(path)) {
                         Subtask subtask = httpTaskManager.getSubtask(Integer.parseInt(key));
                         if (subtask == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(subtask);
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else if ("epic".equals(path) && key.isEmpty()) {
                         List<Epic> epics = httpTaskManager.getEpicsList();
                         if (epics == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(epics, new TypeToken<List<Epic>>() {}.getType());
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else if ("epic".equals(path)) {
                         Epic epic = httpTaskManager.getEpic(Integer.parseInt(key));
                         if (epic == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(epic);
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else if ("subtask/epic".equals(path)) {
                         List<Subtask> subtasksByEpic = httpTaskManager.getSubtasksByEpic(Integer.parseInt(key));
                         if (subtasksByEpic == null) {
-                            h.sendResponseHeaders(404, 0);
+                            exchange.sendResponseHeaders(404, 0);
                             return;
                         }
                         json = gson.toJson(subtasksByEpic, new TypeToken<List<Subtask>>() {}.getType());
-                        sendText(h, json);
+                        sendText(exchange, json);
                     } else {
-                        h.sendResponseHeaders(404, 0);
+                        exchange.sendResponseHeaders(404, 0);
                     }
                     break;
                 case "POST":
-                    path = extractPath(h);
-                    body = readText(h);
+                    path = extractPath(exchange);
+                    body = readText(exchange);
                     if ("task".equals(path)) {
                         Task task = gson.fromJson(body, Task.class);
                         if (task.getId() != null && httpTaskManager.containsTask(task.getId())) {
@@ -127,7 +128,7 @@ public class HttpTaskServer {
                         } else {
                             httpTaskManager.createTask(task);
                         }
-                        h.sendResponseHeaders(201, 0);
+                        exchange.sendResponseHeaders(201, 0);
                     } else if ("subtask".equals(path)) {
                         Subtask subtask = gson.fromJson(body, Subtask.class);
                         if (subtask.getId() != null && httpTaskManager.containsSubtask(subtask.getId())) {
@@ -135,7 +136,7 @@ public class HttpTaskServer {
                         } else {
                             httpTaskManager.createSubtask(subtask);
                         }
-                        h.sendResponseHeaders(201, 0);
+                        exchange.sendResponseHeaders(201, 0);
                     } else if ("epic".equals(path)) {
                         Epic epic = gson.fromJson(body, Epic.class);
                         if (epic.getId() != null && httpTaskManager.containsEpic(epic.getId())) {
@@ -143,41 +144,41 @@ public class HttpTaskServer {
                         } else {
                             httpTaskManager.createEpic(epic);
                         }
-                        h.sendResponseHeaders(201, 0);
+                        exchange.sendResponseHeaders(201, 0);
                     } else {
-                        h.sendResponseHeaders(404, 0);
+                        exchange.sendResponseHeaders(404, 0);
                     }
                     break;
                 case "DELETE":
-                    path = extractPath(h);
-                    key = extractKey(h);
+                    path = extractPath(exchange);
+                    key = extractKey(exchange);
                     if ("task".equals(path) && key.isEmpty()) {
                         httpTaskManager.deleteAllTasks();
-                        sendText(h, "All tasks deleted.");
+                        sendText(exchange, "All tasks deleted.");
                     } else if ("task".equals(path)) {
                         httpTaskManager.deleteTask(Integer.parseInt(key));
-                        sendText(h, "Task with id = " + key + " deleted.");
+                        sendText(exchange, "Task with id = " + key + " deleted.");
                     } else if ("subtask".equals(path) && key.isEmpty()) {
                         httpTaskManager.deleteAllSubtasks();
-                        sendText(h, "All subtasks deleted.");
+                        sendText(exchange, "All subtasks deleted.");
                     } else if ("subtask".equals(path)) {
                         httpTaskManager.deleteSubtask(Integer.parseInt(key));
-                        sendText(h, "Subtask with id = " + key + " deleted.");
+                        sendText(exchange, "Subtask with id = " + key + " deleted.");
                     } else if ("epic".equals(path) && key.isEmpty()) {
                         httpTaskManager.deleteAllEpics();
-                        sendText(h, "All epics deleted.");
+                        sendText(exchange, "All epics deleted.");
                     } else if ("epic".equals(path)) {
                         httpTaskManager.deleteEpic(Integer.parseInt(key));
-                        sendText(h, "Epic with id = " + key + " deleted.");
+                        sendText(exchange, "Epic with id = " + key + " deleted.");
                     } else {
-                        h.sendResponseHeaders(404, 0);
+                        exchange.sendResponseHeaders(404, 0);
                     }
                         break;
                     default:
-                    h.sendResponseHeaders(404, 0);
+                    exchange.sendResponseHeaders(404, 0);
             }
         } finally {
-            h.close();
+            exchange.close();
         }
     }
 
@@ -191,25 +192,25 @@ public class HttpTaskServer {
         System.out.println("HttpTask сервер остановлен на порту " + PORT);
     }
 
-    private String readText(HttpExchange h) throws IOException {
-        return new String(h.getRequestBody().readAllBytes(), UTF_8);
+    private String readText(HttpExchange exchange) throws IOException {
+        return new String(exchange.getRequestBody().readAllBytes(), UTF_8);
     }
 
-    private String extractPath(HttpExchange h) {
-        return h.getRequestURI().getPath().substring("/tasks/".length());
+    private String extractPath(HttpExchange exchange) {
+        return exchange.getRequestURI().getPath().substring("/tasks/".length());
     }
 
-    private String extractKey(HttpExchange h) {
-        if (h.getRequestURI().getQuery() == null) {
+    private String extractKey(HttpExchange exchange) {
+        if (exchange.getRequestURI().getQuery() == null) {
             return "";
         }
-        return h.getRequestURI().getQuery().substring("id=".length());
+        return exchange.getRequestURI().getQuery().substring("id=".length());
     }
 
-    private void sendText(HttpExchange h, String json) throws IOException {
+    private void sendText(HttpExchange exchange, String json) throws IOException {
         byte[] resp = json.getBytes(UTF_8);
-        h.getResponseHeaders().add("Content-Type", "application/json");
-        h.sendResponseHeaders(200, resp.length);
-        h.getResponseBody().write(resp);
+        exchange.getResponseHeaders().add("Content-Type", "application/json");
+        exchange.sendResponseHeaders(200, resp.length);
+        exchange.getResponseBody().write(resp);
     }
 }
