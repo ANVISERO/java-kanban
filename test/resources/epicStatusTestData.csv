@@ -1,0 +1,8 @@
+id,type,name,status,description,startTime,duration,epic
+1,EPIC,epic,[В процессе],descriptionEpic,,,
+2,SUBTASK,subtask1,[В процессе],descriptionSubtask1,,,1
+3,SUBTASK,subtask2,[В процессе],descriptionSubtask2,,,1
+4,SUBTASK,subtask3,[В процессе],descriptionSubtask3,,,1
+5,SUBTASK,subtask4,[В процессе],descriptionSubtask4,,,1
+
+1
