@@ -1,4 +1,4 @@
-package ru.yandex.practicum.kanban;
+package ru.yandex.practicum.kanban.service.server;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

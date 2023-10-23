@@ -1,4 +1,4 @@
-package ru.yandex.practicum.kanban;
+package ru.yandex.practicum.kanban.service.managers;
 
 import main.ru.yandex.practicum.kanban.service.managers.HttpTaskManager;
 import main.ru.yandex.practicum.kanban.service.server.KVServer;

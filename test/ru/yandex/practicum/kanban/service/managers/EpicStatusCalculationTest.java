@@ -1,4 +1,4 @@
-package ru.yandex.practicum.kanban;
+package ru.yandex.practicum.kanban.service.managers;
 
 import main.ru.yandex.practicum.kanban.model.Epic;
 import main.ru.yandex.practicum.kanban.model.Status;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 public class EpicStatusCalculationTest {
-    private static final String PATH = "test/ru/yandex/practicum/kanban/resources/epicStatusTestData.csv";
+    private static final String PATH = "test/resources/epicStatusTestData.csv";
     private static FileBackedTasksManager fileBackedTasksManager;
     private static Epic epic;
 

@@ -1,4 +1,4 @@
-package ru.yandex.practicum.kanban;
+package ru.yandex.practicum.kanban.service.managers;
 
 import main.ru.yandex.practicum.kanban.model.Epic;
 import main.ru.yandex.practicum.kanban.model.Task;
@@ -15,13 +15,13 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     @Override
     void setTaskManager() {
         taskManager = new FileBackedTasksManager(
-                "test/ru/yandex/practicum/kanban/resources/fileBackedTasksManagerTest.csv");
+                "test/resources/fileBackedTasksManagerTest.csv");
     }
 
     @Test
     void testLoadFromEmptyFile() {
         FileBackedTasksManager manager
-                = FileBackedTasksManager.loadFromFile("test/ru/yandex/practicum/kanban/resources/empty.csv");
+                = FileBackedTasksManager.loadFromFile("test/resources/empty.csv");
         assertTrue(manager.getTasksList().isEmpty()
                 && manager.getEpicsList().isEmpty()
                 && manager.getSubtasksList().isEmpty());
@@ -30,14 +30,14 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     @Test
     void testLoadFromFileWhereEpicHaveNoSubtasks() {
         FileBackedTasksManager fileBackedTasksManager
-                = new FileBackedTasksManager("test/ru/yandex/practicum/kanban/resources/epicHaveNoSubtasks.csv");
+                = new FileBackedTasksManager("test/resources/epicHaveNoSubtasks.csv");
         Task task = new Task("task", "descTask",
                 LocalDateTime.of(2023, 10, 17, 15, 5), Duration.ofMinutes(60));
         Epic epic = new Epic("epic", "descEpic");
         fileBackedTasksManager.createTask(task);
         final int epicId = fileBackedTasksManager.createEpic(epic);
         FileBackedTasksManager newFileBackedTasksManager = FileBackedTasksManager
-                .loadFromFile("test/ru/yandex/practicum/kanban/resources/epicHaveNoSubtasks.csv");
+                .loadFromFile("test/resources/epicHaveNoSubtasks.csv");
         assertTrue(newFileBackedTasksManager.getEpic(epicId).getSubtaskIds().isEmpty(),
                 "Предполагалась загрузка в программу пустого эпика, но что то пошло не так.");
     }
@@ -45,14 +45,14 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     @Test
     void testLoadFromFileWhereHistoryIsEmpty() {
         FileBackedTasksManager fileBackedTasksManager
-                = new FileBackedTasksManager("test/ru/yandex/practicum/kanban/resources/emptyHistory.csv");
+                = new FileBackedTasksManager("test/resources/emptyHistory.csv");
         Task task = new Task("task", "descTask",
                 LocalDateTime.of(2023, 10, 17, 15, 5), Duration.ofMinutes(60));
         Epic epic = new Epic("epic", "descEpic");
         fileBackedTasksManager.createTask(task);
         fileBackedTasksManager.createEpic(epic);
         FileBackedTasksManager newFileBackedTasksManager = FileBackedTasksManager
-                .loadFromFile("test/ru/yandex/practicum/kanban/resources/emptyHistory.csv");
+                .loadFromFile("test/resources/emptyHistory.csv");
         assertTrue(newFileBackedTasksManager.getHistory().isEmpty(),
                 "Предполагалась загрузка в программу пустой истории, но что то пошло не так.");
     }
@@ -60,7 +60,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
     @Test
     void testLoadFromFileWithDefaultHistory() {
         FileBackedTasksManager fileBackedTasksManager
-                = new FileBackedTasksManager("test/ru/yandex/practicum/kanban/resources/defaultHistory.csv");
+                = new FileBackedTasksManager("test/resources/defaultHistory.csv");
         Task task = new Task("task", "descTask",
                 LocalDateTime.of(2023, 10, 17, 15, 5), Duration.ofMinutes(60));
         Task task1 = new Task("task1", "descTask1",
@@ -73,7 +73,7 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         fileBackedTasksManager.getTask(taskId1);
         fileBackedTasksManager.getEpic(epicId);
         FileBackedTasksManager newFileBackedTasksManager = FileBackedTasksManager
-                .loadFromFile("test/ru/yandex/practicum/kanban/resources/defaultHistory.csv");
+                .loadFromFile("test/resources/defaultHistory.csv");
         assertFalse(newFileBackedTasksManager.getHistory().isEmpty(),
                 "Предполагалась загрузка в программу пустой истории, но что то пошло не так.");
     }

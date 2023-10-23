@@ -1,6 +1,0 @@
-id,type,name,status,description,startTime,duration,epic
-1,TASK,task,[Новый],descTask,2023-10-17T15:05,PT1H,
-2,TASK,task1,[Новый],descTask1,2024-10-17T15:05,PT1H,
-3,EPIC,epic,[Новый],descEpic,,,
-
-1,2,3

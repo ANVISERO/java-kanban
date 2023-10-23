@@ -9,21 +9,21 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class KVTaskClient {
-    private final String KVServer_URI;
+    private final String KV_SERVER_URI;
 
     private String apiToken;
     private final HttpClient httpClient;
 
     public KVTaskClient(final String uri) {
         this.httpClient = HttpClient.newHttpClient();
-        this.KVServer_URI = uri;
+        this.KV_SERVER_URI = uri;
         register();
     }
 
     public void put(String key, String json) {
         try {
             HttpRequest putRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(KVServer_URI + "save/" + key + "?API_TOKEN=" + apiToken))
+                    .uri(URI.create(KV_SERVER_URI + "save/" + key + "?API_TOKEN=" + apiToken))
                     .version(HttpClient.Version.HTTP_1_1)
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
@@ -43,7 +43,7 @@ public class KVTaskClient {
     public String load(String key) {
         try {
             HttpRequest loadRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(KVServer_URI + "load/" + key + "?API_TOKEN=" + apiToken))
+                    .uri(URI.create(KV_SERVER_URI + "load/" + key + "?API_TOKEN=" + apiToken))
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .build();
@@ -66,7 +66,7 @@ public class KVTaskClient {
     public void register() {
         try {
             HttpRequest registerRequest = HttpRequest.newBuilder()
-                    .uri(URI.create(KVServer_URI + "register"))
+                    .uri(URI.create(KV_SERVER_URI + "register"))
                     .version(HttpClient.Version.HTTP_1_1)
                     .GET()
                     .build();
